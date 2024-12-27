@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-const BlogList = ({ blogs, title, deleteBtn }) => {
+const BlogList = ({ blogs, title }) => {
   return(
     <div className="blog-list">
       <h2>{title}</h2>
@@ -10,7 +10,7 @@ const BlogList = ({ blogs, title, deleteBtn }) => {
           <div className="blog-preview" key={blog.id}>
             <h2>{blog.title}</h2>
             <p>Written by {blog.author}</p>
-            <button onClick={() => deleteBtn(blog.id)}>Delete Blog</button>
+
           </div>
           
         )}
