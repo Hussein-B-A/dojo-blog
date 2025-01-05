@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 
 const useFetch = (url) => {
-    const [data, setBlogs] = useState(null);
+    const [data, setData] = useState(null);
     const [isLoading, setIsLeading] = useState(true);
     const [error, setError] = useState(null)
 
       useEffect(() => {
-            fetch(url)
+        const abortContstant = new AbortController();
+
+            fetch(url, {signal: abortContstant.signal})
             .then((res) => {
                 if (!res.ok) {
                     throw Error("Could Not Fetch the Data for that Resource")    
@@ -16,15 +18,26 @@ const useFetch = (url) => {
             })
             .then(
                 (data) => {
-                    setBlogs(data)
+                    setData(data)
                     setIsLeading(false)
                     setError(null)
                 }
             )
             .catch((error) => {
+                console.log(error);
+                
+                if(error.name === "AbortError") {
+                    console.log("fetch aborted");
+                } else {
                 setIsLeading(false)
                 setError(error.message)
+                }
+
             })
+
+            return () => abortContstant.abort();
+            
+            
       }, [url])
 
       return {data, isLoading, error}
